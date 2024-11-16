@@ -32,7 +32,7 @@ def main():
     # Create dataset and dataloader
     dataset = ImageFolderDataset(folder_path, transform=EditImage) 
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
-    
+
     #download a model
     model = "model function"
     
