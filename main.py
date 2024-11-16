@@ -3,7 +3,7 @@ import os
 from PIL import Image
 import torch
 from torch.utils.data import Dataset, DataLoader
-from "preprocess file" import "preprocess function"
+from Image_converter import EditImage
 from "file with model" import "model function"
 
 #
@@ -30,7 +30,7 @@ def main():
     batch_size = 16 #volume images which processing one time
     
     # Create dataset and dataloader
-    dataset = ImageFolderDataset(folder_path, transform="preprocess function") 
+    dataset = ImageFolderDataset(folder_path, transform=EditImage) 
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
     
     #download a model
