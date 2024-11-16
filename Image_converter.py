@@ -14,6 +14,3 @@ def EditImage(Input_Img,side_size,filter_type,zoom_scale):
     #Редактирует изображение выбранным способом
     Edited_Img = Edited_Img.convert(filter_type)
     return Edited_Img
-with Image.open(r"C:\Users\Георгий\Desktop\GFuncs\Input\1.jpg") as IMG:
-    IMG = EditImage(IMG,512,"",0)
-    IMG.save(r"C:\Users\Георгий\Desktop\GFuncs\Output\final2.png")
