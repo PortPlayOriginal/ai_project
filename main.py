@@ -3,6 +3,7 @@ import os
 from PIL import Image
 import torch
 from torch.utils.data import Dataset, DataLoader
+import cv2
 from Image_converter import EditImage
 from "file with model" import "model function"
 
@@ -23,6 +24,43 @@ class ImageFolderDataset(Dataset):
         image = Image.open(img_path).convert("RGB") #open image and convert to rgb
         image = self.transform(image)  #Use preprocess
         return image, self.image_files[idx] #return image and name
+
+def process_video(video_path, model, transform):
+    
+    cap = cv2.VideoCapture(video_path)  #open video
+
+    if not cap.isOpened():
+        print(f"Не удалось открыть видео: {video_path}")
+        return
+
+    while True:
+        ret, frame = cap.read()  #reading frame from video
+        if not ret:
+            break  #ending process, if frames were ending
+        
+        #convert frame to PIL Image for preprocessing 
+        image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        image = transform(image)  #USe preprocessing
+
+        #Added batch
+        image = image.unsqueeze(0)
+
+        #Do a predict 
+        pred = predict(model, image)
+
+        #Show the result 
+        cv2.putText(frame, f"Predicted class: {pred.item()}", (10, 30), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        
+        #Show frame with the result 
+        cv2.imshow("Video Prediction", frame)
+
+        #Stop by press key 'Q'
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
 
 #main function 
 def main():
